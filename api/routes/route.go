@@ -4,7 +4,9 @@ import (
 	"github.com/uptrace/bun"
 	"goyave.dev/goyave/v4"
 
-	"github.com/MustafaMathhar/jourism_ai/api/controllers"
+	"github.com/MustafaMathhar/jourism_ai/api/controllers/attraction"
+	"github.com/MustafaMathhar/jourism_ai/api/controllers/category"
+	"github.com/MustafaMathhar/jourism_ai/api/controllers/profile"
 )
 
 type DataStore struct{ DB *bun.DB }
@@ -17,22 +19,27 @@ func (ds *DataStore) Register(router *goyave.Router) {
 
 // Handler function for the "/hello" route
 func CategoryRoutes(router *goyave.Router, db *bun.DB) {
-	cc := &controllers.CategoryController{DB: db}
+	cc := &category.Controller{DB: db}
 	categoryRouter := router.Subrouter("/categories")
 	categoryRouter.Get("", cc.Index)
 	categoryRouter.Get("/{id:[0-9]+}", cc.Show)
 }
 
 func AttractionRoutes(router *goyave.Router, db *bun.DB) {
-	ac := &controllers.AttractionController{DB: db}
+	ac := &attraction.Controller{DB: db}
 	attractionRouter := router.Subrouter("/attractions")
 	attractionRouter.Get("", ac.Index)
 	attractionRouter.Get("/{id:[0-9]+}", ac.Show)
 }
 
 func ProfileRoutes(router *goyave.Router, db *bun.DB) {
-	pc := &controllers.ProfileController{DB: db}
+	pc := &profile.Controller{DB: db}
 	profileRouter := router.Subrouter("/profile/{id:[0-9]+}")
 	profileRouter.Get("", pc.Show)
-	profileRouter.Put("/liked", pc.UpdateLikedAttractions)
+
+	likedAttractions := profileRouter.Group().Subrouter("/liked")
+	likedAttractions.Put("", pc.UpdateLikedAttractions)
+	likedAttractions.Get("", pc.IndexLikedAttractions)
+	likedAttractions.Delete("", pc.DestroyLikedAttractions).
+		Validate(profile.DestroyLikedAttractionsRequest)
 }
