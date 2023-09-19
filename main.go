@@ -16,6 +16,7 @@ import (
 )
 
 func InitializeDBConnection() *sql.DB {
+	
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("[SERVER] Error loading .env file")

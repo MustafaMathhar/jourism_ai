@@ -5,6 +5,7 @@ go 1.21.0
 require (
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/joho/godotenv v1.5.1
+	github.com/matoous/go-nanoid/v2 v2.0.0
 	github.com/uptrace/bun v1.1.16
 	github.com/uptrace/bun/dialect/mysqldialect v1.1.16
 	goyave.dev/goyave/v4 v4.4.11

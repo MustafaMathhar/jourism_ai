@@ -7,6 +7,7 @@ import (
 	"github.com/MustafaMathhar/jourism_ai/api/controllers/attraction"
 	"github.com/MustafaMathhar/jourism_ai/api/controllers/category"
 	"github.com/MustafaMathhar/jourism_ai/api/controllers/profile"
+	"github.com/MustafaMathhar/jourism_ai/datastore/models"
 )
 
 type DataStore struct{ DB *bun.DB }
@@ -33,6 +34,7 @@ func AttractionRoutes(router *goyave.Router, db *bun.DB) {
 }
 
 func ProfileRoutes(router *goyave.Router, db *bun.DB) {
+	db.RegisterModel((*models.AttractionsToDays)(nil))
 	pc := &profile.Controller{DB: db}
 	profileRouter := router.Subrouter("/profile/{id:[0-9]+}")
 	profileRouter.Get("", pc.Show)
@@ -42,4 +44,13 @@ func ProfileRoutes(router *goyave.Router, db *bun.DB) {
 	likedAttractions.Get("", pc.IndexLikedAttractions)
 	likedAttractions.Delete("", pc.DestroyLikedAttractions).
 		Validate(profile.DestroyLikedAttractionsRequest)
+
+	plans := profileRouter.Group().Subrouter("/plans")
+	plans.Get("", pc.IndexPlans)
+	plans.Post("", pc.StorePlan)
+	plans.Put("/{planId:[0-9]+}", pc.UpdatePlans)
+
+	plans.Get("/{planId:[0-9]+}", pc.IndexDays)
+	plans.Get("/{planId:[0-9]+}/{day}", pc.ShowDay)
+	plans.Post("/{planId:[0-9]+}/{day}", pc.UpdateDay)
 }

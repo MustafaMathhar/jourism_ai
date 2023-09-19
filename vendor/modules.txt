@@ -24,6 +24,9 @@ github.com/jinzhu/now
 github.com/joho/godotenv
 # github.com/kr/text v0.1.0
 ## explicit
+# github.com/matoous/go-nanoid/v2 v2.0.0
+## explicit; go 1.15
+github.com/matoous/go-nanoid/v2
 # github.com/pmezard/go-difflib v1.0.0
 ## explicit
 github.com/pmezard/go-difflib/difflib

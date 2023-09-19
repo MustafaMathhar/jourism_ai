@@ -34,7 +34,7 @@ func (cc *Controller) Show(res *goyave.Response, req *goyave.Request) {
 	}
 	category := new(models.Category)
 	err = cc.DB.NewSelect().
-		Model(&category).
+		Model(category).
 		Relation("Attractions").
 		Where("id = ?", id).
 		Limit(1).
