@@ -20,6 +20,7 @@ func (ds *DataStore) Register(router *goyave.Router) {
 
 // Handler function for the "/hello" route
 func CategoryRoutes(router *goyave.Router, db *bun.DB) {
+	db.RegisterModel((*models.AttractionsToCategories)(nil))
 	cc := &category.Controller{DB: db}
 	categoryRouter := router.Subrouter("/categories")
 	categoryRouter.Get("", cc.Index)
@@ -34,17 +35,19 @@ func AttractionRoutes(router *goyave.Router, db *bun.DB) {
 }
 
 func ProfileRoutes(router *goyave.Router, db *bun.DB) {
-	db.RegisterModel((*models.AttractionsToDays)(nil))
+	db.RegisterModel(
+		(*models.AttractionsToDays)(nil),
+		(*models.ProfilesToAttractions)(nil),
+	)
 	pc := &profile.Controller{DB: db}
 	profileRouter := router.Subrouter("/profile/{id:[0-9]+}")
 	profileRouter.Get("", pc.Show)
 
 	likedAttractions := profileRouter.Group().Subrouter("/liked")
-	likedAttractions.Put("", pc.UpdateLikedAttractions)
+	likedAttractions.Put("/{attractionId:[0-9]+}", pc.UpdateLikedAttractions)
 	likedAttractions.Get("", pc.IndexLikedAttractions)
-	likedAttractions.Delete("", pc.DestroyLikedAttractions).
-		Validate(profile.DestroyLikedAttractionsRequest)
-
+	likedAttractions.Get("/{attractionId:[0-9]+}", pc.IsLikedAttraction)
+	likedAttractions.Delete("/{attractionId:[0-9]+}", pc.DestroyLikedAttractions)
 	plans := profileRouter.Group().Subrouter("/plans")
 	plans.Get("", pc.IndexPlans)
 	plans.Post("", pc.StorePlan)

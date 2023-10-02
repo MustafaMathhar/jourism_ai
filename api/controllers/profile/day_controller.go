@@ -22,8 +22,8 @@ func (pc *Controller) IndexDays(res *goyave.Response, req *goyave.Request) {
 	plan := new(models.Plan)
 	err = pc.DB.NewSelect().
 		Model(plan).
-		Relation("Days").
 		Where("id = ?", id).
+		Relation("Days").
 		Scan(req.Request().Context())
 	if err != nil {
 		res.Status(http.StatusNotFound)
@@ -68,14 +68,12 @@ func DayExists(ctx context.Context, db bun.IDB, id int) error {
 
 func (c *Controller) UpdateDay(res *goyave.Response, req *goyave.Request) {
 	dayId := req.Params["day"]
-	attractionids := req.Data["attractions"].([]interface{})
-	var a2d []models.AttractionsToDays
-	for _, attraction := range attractionids {
-		a2d = append(a2d, models.AttractionsToDays{
-			DayID:        dayId,
-			AttractionID: int64(attraction.(float64)),
-		})
+	attraction := req.Data["attraction"].(float64)
+	a2d := models.AttractionsToDays{
+		DayID:        dayId,
+		AttractionID: int64(attraction),
 	}
+	
 
 	result, err := c.DB.NewInsert().
 		Model(&a2d).Exec(req.Request().Context())

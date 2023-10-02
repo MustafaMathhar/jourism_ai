@@ -1,0 +1,74 @@
+# flyctl launch added from vendor/github.com/go-sql-driver/mysql/.gitignore
+vendor/github.com/go-sql-driver/mysql/**/.DS_Store
+vendor/github.com/go-sql-driver/mysql/**/.DS_Store?
+vendor/github.com/go-sql-driver/mysql/**/._*
+vendor/github.com/go-sql-driver/mysql/**/.Spotlight-V100
+vendor/github.com/go-sql-driver/mysql/**/.Trashes
+vendor/github.com/go-sql-driver/mysql/**/Icon?
+vendor/github.com/go-sql-driver/mysql/**/ehthumbs.db
+vendor/github.com/go-sql-driver/mysql/**/Thumbs.db
+vendor/github.com/go-sql-driver/mysql/**/.idea
+
+# flyctl launch added from vendor/github.com/imdario/mergo/.gitignore
+#### joe made this: http://goel.io/joe
+
+#### go ####
+# Binaries for programs and plugins
+vendor/github.com/imdario/mergo/**/*.exe
+vendor/github.com/imdario/mergo/**/*.dll
+vendor/github.com/imdario/mergo/**/*.so
+vendor/github.com/imdario/mergo/**/*.dylib
+
+# Test binary, build with `go test -c`
+vendor/github.com/imdario/mergo/**/*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+vendor/github.com/imdario/mergo/**/*.out
+
+# Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
+vendor/github.com/imdario/mergo/**/.glide
+
+#### vim ####
+# Swap
+vendor/github.com/imdario/mergo/**/[._]*.s[a-v][a-z]
+vendor/github.com/imdario/mergo/**/[._]*.sw[a-p]
+vendor/github.com/imdario/mergo/**/[._]s[a-v][a-z]
+vendor/github.com/imdario/mergo/**/[._]sw[a-p]
+
+# Session
+vendor/github.com/imdario/mergo/**/Session.vim
+
+# Temporary
+vendor/github.com/imdario/mergo/**/.netrwhist
+vendor/github.com/imdario/mergo/**/*~
+# Auto-generated tag files
+vendor/github.com/imdario/mergo/**/tags
+
+# flyctl launch added from vendor/github.com/joho/godotenv/.gitignore
+vendor/github.com/joho/godotenv/**/.DS_Store
+
+# flyctl launch added from vendor/github.com/matoous/go-nanoid/v2/.gitignore
+vendor/github.com/matoous/go-nanoid/v2/**/.idea
+
+# flyctl launch added from vendor/github.com/uptrace/bun/.gitignore
+# Patterns for files created by this project.
+# For other files, use global gitignore.
+vendor/github.com/uptrace/bun/**/*.s3db
+
+# flyctl launch added from vendor/gorm.io/gorm/.gitignore
+vendor/gorm.io/gorm/**/TODO*
+vendor/gorm.io/gorm/**/documents
+vendor/gorm.io/gorm/**/coverage.txt
+vendor/gorm.io/gorm/**/_book
+vendor/gorm.io/gorm/**/.idea
+vendor/gorm.io/gorm/**/vendor
+vendor/gorm.io/gorm/**/.vscode
+
+# flyctl launch added from vendor/goyave.dev/goyave/v4/.gitignore
+vendor/goyave.dev/goyave/v4/**/*.exe
+vendor/goyave.dev/goyave/v4/**/*.out
+vendor/goyave.dev/goyave/v4/**/*.log
+vendor/goyave.dev/goyave/v4/**/coverage.html
+vendor/goyave.dev/goyave/v4/**/.vscode
+vendor/goyave.dev/goyave/v4/**/.DS_Store
+fly.toml

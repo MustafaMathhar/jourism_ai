@@ -16,11 +16,8 @@ import (
 )
 
 func InitializeDBConnection() *sql.DB {
-	
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("[SERVER] Error loading .env file")
-	}
+	godotenv.Load()
+
 	db, err := sql.Open("mysql", os.Getenv("DSN"))
 	if err != nil {
 		log.Fatalf("[SERVER] failed to connect: %v", err)

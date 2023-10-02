@@ -62,17 +62,51 @@ func (pc *Controller) UpdateLikedAttractions(res *goyave.Response, req *goyave.R
 		res.Status(http.StatusNotFound)
 		res.Error(err)
 	}
-	likedID := req.String("attractionId")
-	respDB, err := pc.DB.NewUpdate().
-		Model((*models.Attraction)(nil)).
-		Set("profile_id = ?", id).
-		Where("id = ?", likedID).
-		Exec(req.Request().Context())
+	attractionId, err := strconv.Atoi(req.Params["attractionId"])
+	if err != nil {
+		res.Status(http.StatusNotFound)
+		res.Error(err)
+	}
+
+	values := map[string]interface{}{
+		"profile_id":    id,
+		"attraction_id": attractionId,
+	}
+
+	respDB, err := pc.DB.NewInsert().Table("profiles_to_attractions").
+		Model(&values).Exec(req.Request().Context())
+
 	if err != nil {
 		res.Status(http.StatusNotFound)
 		res.Error(err)
 	} else {
 		res.JSON(http.StatusOK, &respDB)
+	}
+}
+
+func (pc *Controller) IsLikedAttraction(res *goyave.Response, req *goyave.Request) {
+	id, err := strconv.Atoi(req.Params["id"])
+	if err != nil {
+		res.Status(http.StatusNotFound)
+		res.Error(err)
+	}
+	attractionId, err := strconv.Atoi(req.Params["attractionId"])
+	if err != nil {
+		res.Status(http.StatusNotFound)
+		res.Error(err)
+	}
+	exists, err := pc.DB.NewSelect().
+		Model((*models.ProfilesToAttractions)(nil)).
+		Where("(profile_id,attraction_id) = (?, ?)", id, attractionId).
+		Exists(req.Request().Context())
+
+	if err != nil {
+		res.Status(http.StatusNotFound)
+		res.Error(err)
+	} else {
+		res.JSON(http.StatusOK, struct {
+			Exists bool `json:"exists"`
+		}{Exists: exists})
 	}
 }
 
@@ -82,22 +116,18 @@ func (pc *Controller) IndexLikedAttractions(res *goyave.Response, req *goyave.Re
 		res.Status(http.StatusNotFound)
 		res.Error(err)
 	}
-	var liked []models.Attraction
-	respDB, err := pc.DB.
-		NewSelect().
-		Model(&liked).Where("profile_id = ?", id).
-		ScanAndCount(req.Request().Context())
+	profile := new(models.Profile)
+	err = pc.DB.NewSelect().
+		Model(profile).
+		Where("id = ?", id).
+		Relation("Favourites").
+		Scan(req.Request().Context())
+
 	if err != nil {
 		res.Status(http.StatusNotFound)
 		res.Error(err)
 	} else {
-		res.JSON(http.StatusOK, struct {
-			Liked *[]models.Attraction `json:"liked"`
-			Count int                  `json:"count"`
-		}{
-			Count: respDB,
-			Liked: &liked,
-		})
+		res.JSON(http.StatusOK, &profile)
 	}
 }
 
@@ -107,14 +137,18 @@ func (pc *Controller) DestroyLikedAttractions(res *goyave.Response, req *goyave.
 		res.Status(http.StatusNotFound)
 		res.Error(err)
 	}
-	attractionIds := req.Data["attractionIds"]
+	attractionId, err := strconv.Atoi(req.Params["attractionId"])
+	if err != nil {
+		res.Status(http.StatusNotFound)
+		res.Error(err)
+	}
+
 	respDB, err := pc.DB.
-		NewUpdate().
-		Model((*models.Attraction)(nil)).
-		Set("profile_id = NULL").
-		Where("id IN (?)", bun.In(attractionIds)).
-		Where("profile_id = ?", id).
+		NewDelete().
+		Table("profiles_to_attractions").
+		Where("(profile_id,attraction_id)= (?,?)", id, attractionId).
 		Exec(req.Request().Context())
+
 	if err != nil {
 		res.Status(http.StatusNotFound)
 		res.Error(err)

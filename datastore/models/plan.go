@@ -12,6 +12,6 @@ type Plan struct {
 	StartDate     *time.Time `bun:"start_date"                   json:"startDate"`
 	EndDate       *time.Time `bun:"end_date"                     json:"endDate"`
 	Name          string     `bun:"name,notnull"                 json:"name"`
-	Days          []*Day     `bun:"rel:has-many,join:id=plan_id" json:"days"`
+	Days          []*Day      `bun:"rel:has-many,join:id=plan_id" json:"days"`
 	ID            int64      `bun:"id,pk,autoincrement"          json:"id"`
 }

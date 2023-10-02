@@ -1,5 +1,7 @@
 include .env
 export
+s3sync:
+	aws s3 sync ./public s3://competition-bucket23/
 create:
 	@read -p "Enter the migration: " INP; \
 	migrate create -ext sql -dir datastore/migrations -seq $$INP
