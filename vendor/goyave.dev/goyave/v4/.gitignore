@@ -1,6 +1,0 @@
-*.exe
-*.out
-*.log
-coverage.html
-.vscode/
-.DS_Store
